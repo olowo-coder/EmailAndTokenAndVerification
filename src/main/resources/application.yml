@@ -1,0 +1,50 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/testDB
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+#    show-sql: true
+  mail:
+    host: localhost
+    port: 1025
+    username: hello
+    password: hello
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: "*"
+          auth: true
+          starttls:
+            enable: true
+          connectionTimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+
+#  mail:
+#    protocol: smtp
+#    port: 587
+#    username: lanre.olowo@yahoo.com
+#    password: dkgjihbxnbiioekd
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#      ssl:
+#        trust: smtp.mail.yahoo.com
+
+
+
+server:
+  port: 6565
+  error:
+    include-binding-errors: always
+    include-message: always
