@@ -7,10 +7,11 @@ import com.example.registrationandemailverify.email.EmailSender;
 import com.example.registrationandemailverify.registration.token.ConfirmationToken;
 import com.example.registrationandemailverify.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.SequenceGenerator;
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
 @Service
@@ -20,8 +21,11 @@ public class RegistrationService {
     private final EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
+    private Environment env;
 
-    public String register(RegistrationRequest request) {
+
+
+    public String register(RegistrationRequest request, HttpServletRequest site) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
         if(!isValidEmail){
             throw new IllegalStateException("Not valid email");
@@ -31,9 +35,11 @@ public class RegistrationService {
                         request.getLastName(),
                         request.getEmail(),
                         request.getPassword(),
-                        AppUserRole.USER)
+                        request.getRole())
+//                        AppUserRole.valueOf(request.getRole().toUpperCase()))
         );
-        String link = " http://localhost:6565/api/registration/confirm?token=" + token;
+//        String link = Utility.getSiteURL(site) +"/confirm?token=" + token;
+        String link = env.getProperty("website.address")+ env.getProperty("server.port") + "/api/registration/confirm?token=" + token;
         emailSender.send(request.getEmail(), buildEmail(request.getFirstName(), link));
         return token;
     }

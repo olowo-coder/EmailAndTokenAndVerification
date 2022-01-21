@@ -26,9 +26,8 @@ spring:
           connectionTimeout: 5000
           timeout: 3000
           writetimeout: 5000
-
+#
 #  mail:
-#    protocol: smtp
 #    port: 587
 #    username: lanre.olowo@yahoo.com
 #    password: dkgjihbxnbiioekd
@@ -38,8 +37,7 @@ spring:
 #          auth: true
 #          starttls:
 #            enable: true
-#      ssl:
-#        trust: smtp.mail.yahoo.com
+#    host: smtp.mail.yahoo.com
 
 
 
@@ -48,3 +46,6 @@ server:
   error:
     include-binding-errors: always
     include-message: always
+
+website:
+  address: "http://localhost:"

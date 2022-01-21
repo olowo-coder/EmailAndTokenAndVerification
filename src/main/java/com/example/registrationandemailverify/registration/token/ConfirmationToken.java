@@ -2,6 +2,8 @@ package com.example.registrationandemailverify.registration.token;
 
 import com.example.registrationandemailverify.appUser.AppUser;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -41,6 +43,7 @@ public class ConfirmationToken {
             nullable = false,
             name = "app_user_id"
     )
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private AppUser appUser;
 
     public ConfirmationToken(String token, LocalDateTime createdAt, LocalDateTime expiresAt, AppUser appUser) {

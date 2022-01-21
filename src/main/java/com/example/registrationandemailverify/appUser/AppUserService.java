@@ -1,6 +1,7 @@
 package com.example.registrationandemailverify.appUser;
 
 import com.example.registrationandemailverify.registration.token.ConfirmationToken;
+import com.example.registrationandemailverify.registration.token.ConfirmationTokenRepository;
 import com.example.registrationandemailverify.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,8 +9,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -19,10 +22,8 @@ public class AppUserService implements UserDetailsService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
     private final static String USER_NOT_FOUND = "User with email %s not found";
+    private final ConfirmationTokenRepository confirmationTokenRepository;
 
-//    public AppUserService(AppUserRepository appUserRepository) {
-//        this.appUserRepository = appUserRepository;
-//    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -51,5 +52,16 @@ public class AppUserService implements UserDetailsService {
     public void enableUser(String email){
         appUserRepository.findByEmail(email).ifPresent((user) ->
                user.setEnabled(true));
+    }
+
+    public List<AppUser> getAllAppUsers() {
+        return appUserRepository.findAll();
+    }
+
+    @Transactional
+    public String deleteAppUser(Long id) {
+        confirmationTokenRepository.deleteByAppUserId(id);
+        appUserRepository.deleteById(id);
+        return "deleted";
     }
 }
